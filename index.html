@@ -2014,7 +2014,7 @@ function renderIngreso() {
       </div>
 
       <hr class="divider">
-      <div class="section-title">👤 Conductor</div>
+      <div class="section-title">👤 Conductor</div><div style="display:flex;gap:8px;margin-bottom:14px"><button type="button" class="btn btn-secondary" style="flex:1;font-size:13px;padding:10px" onclick="identificarConductorConCredencial('huella')">👆 Huella</button><button type="button" class="btn btn-secondary" style="flex:1;font-size:13px;padding:10px" onclick="identificarConductorConCredencial('rfid')">📇 Tarjeta</button><button type="button" class="btn btn-secondary" style="flex:1;font-size:13px;padding:10px" onclick="identificarConductorConCredencial('qr')">🔳 QR</button></div>
 
       <div class="field">
         <label class="field-label">Nombre del conductor *</label>
@@ -2553,6 +2553,7 @@ async function autocompleteConductor(val) {
   }, 250);
 }
 
+async function identificarConductorConCredencial(tipo) { const label = AccessSimulator.METODOS[tipo]?.label || tipo; const valor = prompt(`Simular lectura de ${label} — ingresá el valor a simular:`); if (!valor) return; const resultado = await AccessSimulator.simulate(tipo, valor.trim()); if (resultado.ok && resultado.persona) { const p = resultado.persona; const campoConductor = document.getElementById('ingresoConductor'); const campoDocumento = document.getElementById('ingresoDocumento'); if (campoConductor) campoConductor.value = p.nombre || ''; if (campoDocumento) campoDocumento.value = p.documento || ''; } }
 function closeAutocomplete(id) {
   const el = document.getElementById(id);
   if (el) el.classList.remove('open');
