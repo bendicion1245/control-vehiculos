@@ -3723,6 +3723,11 @@ function renderIngresoPersona() {
     </div>
     <div class="card">
       <div class="section-title">🔍 Identificación</div>
+<div style="display:flex;gap:8px;margin-bottom:14px">
+  <button type="button" class="btn btn-secondary" style="flex:1;font-size:13px;padding:10px" onclick="identificarConCredencial('huella')">👆 Huella</button>
+  <button type="button" class="btn btn-secondary" style="flex:1;font-size:13px;padding:10px" onclick="identificarConCredencial('rfid')">📇 Tarjeta</button>
+  <button type="button" class="btn btn-secondary" style="flex:1;font-size:13px;padding:10px" onclick="identificarConCredencial('qr')">🔳 QR</button>
+</div>
       <div class="field">
         <label class="field-label">Nombre *</label>
         <div class="autocomplete-wrap">
@@ -3936,6 +3941,13 @@ function tipPersonaLabel(tipo) {
   return { empleado:'Empleado', visita:'Visita', contratista:'Contratista', proveedor:'Proveedor' }[tipo] || tipo;
 }
 
+async function identificarConCredencial(tipo) {
+  const label = AccessSimulator.METODOS[tipo]?.label || tipo;
+  const valor = prompt(`Simular lectura de ${label} — ingresá el valor a simular:`);
+  if (!valor) return;
+  const resultado = await AccessSimulator.simulate(tipo, valor.trim());
+  if (resultado.ok && resultado.persona) { seleccionarPersona(JSON.stringify(resultado.persona)); }
+}
 // Seleccionar foto de perfil nueva
 function seleccionarFotoPerfil(event) {
   const file = event.target.files[0];
