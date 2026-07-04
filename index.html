@@ -2281,7 +2281,7 @@ const AccessSimulator = (() => {
                                             const { data, error } = await sb
                                                   .from('credenciales')
                                                         .select('*, personas(*)')
-                                                              .eq(campo, valor)
+                                                              .ilike(campo, valor)
                                                                     .eq('tipo', tipo)
                                                                           .maybeSingle();
                                                                           
