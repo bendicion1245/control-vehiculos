@@ -1361,7 +1361,7 @@ tr:hover td{background:var(--bg-3)}
   </div>
 </div>
 
-<!-- Modal: User Menu -->
+<div class="modal-overlay" id="modalAcercaDe"><div class="modal setup-modal"><div class="modal-header"><span class="modal-title">ℹ️ Acerca del sistema</span><button class="modal-close" onclick="closeModal('modalAcercaDe')">✕</button></div><div class="modal-body" style="text-align:center;padding:24px 20px;"><div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#1d4ed8);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 6px 18px rgba(37,99,235,0.35);"><span style="color:#fff;font-size:22px;font-weight:800;letter-spacing:-1px;">VP</span></div><div style="font-size:19px;font-weight:700;margin-bottom:2px;">VehiControl Pro</div><div style="font-size:12.5px;color:#9ca3af;margin-bottom:18px;">Sistema Profesional de Control de Acceso Vehicular y Peatonal</div><div style="text-align:left;background:#141414;border-radius:12px;padding:14px 16px;margin-bottom:14px;font-size:13px;line-height:1.9;"><div><strong>Versión:</strong> 1.0</div><div><strong>Actualizado:</strong> Julio 2026</div><div><strong>Desarrollado por:</strong> Pablo López</div><div style="font-size:11.5px;color:#9ca3af;margin-top:4px;">Todos los derechos reservados.</div></div><div style="text-align:left;background:#141414;border-radius:12px;padding:14px 16px;font-size:12.5px;line-height:1.9;"><div id="acercaDeSupabaseEstado">🔄 Verificando conexión con Supabase...</div><div id="acercaDeNavegador"></div><div id="acercaDeDispositivo"></div></div></div><div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('modalAcercaDe')">Cerrar</button></div></div></div><!-- Modal: User Menu -->
 <div class="modal-overlay" id="modalUserMenu">
   <div class="modal setup-modal">
     <div class="modal-header">
@@ -1373,7 +1373,7 @@ tr:hover td{background:var(--bg-3)}
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modalUserMenu')">Cerrar</button>
-      <button class="btn btn-danger" onclick="doLogout()">🚪 Cerrar sesión</button>
+      <button class="btn btn-ghost" onclick="abrirAcercaDe()">ℹ️ Acerca del sistema</button><button class="btn btn-danger" onclick="doLogout()">🚪 Cerrar sesión</button>
     </div>
   </div>
 </div>
@@ -2554,6 +2554,7 @@ async function autocompleteConductor(val) {
 }
 
 async function identificarConductorConCredencial(tipo) { const label = AccessSimulator.METODOS[tipo]?.label || tipo; const valor = prompt(`Simular lectura de ${label} — ingresá el valor a simular:`); if (!valor) return; const resultado = await AccessSimulator.simulate(tipo, valor.trim()); if (resultado.ok && resultado.persona) { const p = resultado.persona; const campoConductor = document.getElementById('ingresoConductor'); const campoDocumento = document.getElementById('ingresoDocumento'); if (campoConductor) campoConductor.value = p.nombre || ''; if (campoDocumento) campoDocumento.value = p.documento || ''; } }
+async function abrirAcercaDe() { openModal('modalAcercaDe'); const elEstado = document.getElementById('acercaDeSupabaseEstado'); try { const { error } = await sb.from('usuarios').select('id').limit(1); elEstado.innerHTML = error ? '🔴 Supabase: error de conexión' : '🟢 Supabase: conectado correctamente'; } catch (e) { elEstado.innerHTML = '🔴 Supabase: sin conexión'; } const elNav = document.getElementById('acercaDeNavegador'); if (elNav) elNav.innerHTML = `<strong>Navegador:</strong> ${navigator.userAgent.split(') ')[0].split('(')[1] || navigator.userAgent}`; const elDisp = document.getElementById('acercaDeDispositivo'); if (elDisp) elDisp.innerHTML = `<strong>Pantalla:</strong> ${window.screen.width}x${window.screen.height}`; }
 function closeAutocomplete(id) {
   const el = document.getElementById(id);
   if (el) el.classList.remove('open');
